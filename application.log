@@ -1,0 +1,4 @@
+2021-04-26 20:16:09,252 - ib-custom - INFO - Application started
+2021-04-26 20:16:09,279 - quart.serving - INFO - Running on http://127.0.0.1:5000 (CTRL + C to quit)
+2021-04-26 20:18:30,511 - ib-custom - INFO - Application started
+2021-04-26 20:18:30,535 - quart.serving - INFO - Running on http://127.0.0.1:5000 (CTRL + C to quit)
