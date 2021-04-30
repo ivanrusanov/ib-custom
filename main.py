@@ -30,6 +30,13 @@ def health():
     return 'OK'
 
 
+@qrt.route('/accounts')
+async def account():
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        acct = json.dumps(ibi.managedAccounts())
+    return acct
+
+
 @qrt.route('/summary')
 async def summary():
     with await IB().connectAsync(host, port, client_id) as ibi:
@@ -40,11 +47,29 @@ async def summary():
     return resp
 
 
+@qrt.route('/summary/<account>')
+async def summary_for_account(account):
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _summary = ibi.accountSummary(account)
+        await ibi.accountSummaryEvent
+        resp = json.dumps(util.tree(_summary))
+    return resp
+
+
 @qrt.route('/pnl')
 async def pnl():
     with await IB().connectAsync(host, port, client_id) as ibi:
         acct = ibi.managedAccounts()[0]
         pnl = ibi.reqPnL(acct)
+        await ibi.pnlEvent
+        resp = json.dumps(util.tree(pnl))
+    return resp
+
+
+@qrt.route('/pnl/<account>')
+async def pnl_for_account(account):
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        pnl = ibi.reqPnL(account)
         await ibi.pnlEvent
         resp = json.dumps(util.tree(pnl))
     return resp
