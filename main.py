@@ -40,8 +40,7 @@ async def account():
 @qrt.route('/summary')
 async def summary():
     with await IB().connectAsync(host, port, client_id) as ibi:
-        acct = ibi.managedAccounts()[0]
-        _summary = ibi.accountSummary(acct)
+        _summary = ibi.accountSummary()
         await ibi.accountSummaryEvent
         resp = json.dumps(util.tree(_summary))
     return resp
@@ -72,6 +71,22 @@ async def pnl_for_account(account):
         pnl = ibi.reqPnL(account)
         await ibi.pnlEvent
         resp = json.dumps(util.tree(pnl))
+    return resp
+
+
+@qrt.route('/positions')
+async def positions():
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _positions = ibi.positions()
+        resp = json.dumps(util.tree(_positions))
+    return resp
+
+
+@qrt.route('/positions/<account>')
+async def positions_for_account(account):
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _positions = ibi.positions(account)
+        resp = json.dumps(util.tree(_positions))
     return resp
 
 
