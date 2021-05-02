@@ -2,13 +2,20 @@
 The goal of this project is to present an easy-to-use REST API to access data in Interactive Brokers Trader Workstation (TWS).
 
 ## Requirements
-- Python 3.6 or higher
+- Python 3.6 or higher and PIP
 - A running TWS or IB Gateway application (version 972 or higher)
 
 Make sure the API port of the TWS is enabled (https://interactivebrokers.github.io/tws-api/initial_setup.html)
 
 If you need to host IB Custom not on the same machine TWS is running on you also need to disable "Allow connections from 
 localhost only" checkbox in TWS API settings.
+
+## Installation/Deployment
+1. Download this repository
+2. Set TWS IP-address and Port in *settings.ini* (only if it is running on the separate machine)
+3. In terminal go to the project root and install python packages using `pip install -r requirements.txt`
+4. Run server with `python main.py`
+5. You can perform health-check with `curl http://localhost:5000/health`
 
 ## Endpoints
 
