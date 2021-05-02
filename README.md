@@ -32,7 +32,7 @@ Response example: `["DU3799451", "DU3243554"]`
 ### GET /summary/\<account name\>
 List of account values for the given account, or of all accounts if account is left blank.
 
-Request example: `http://localhost:5000/pnl/DU3799451`
+Request example: `http://localhost:5000/summary/DU3799451`
 
 Response example:
 ```
@@ -51,146 +51,7 @@ Response example:
         "currency": "",
         "modelCode": ""
     },
-    {
-        "account": "DU3799451",
-        "tag": "DayTradesRemaining",
-        "value": "-1",
-        "currency": "",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "LookAheadNextChange",
-        "value": "0",
-        "currency": "",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "AccruedCash",
-        "value": "0.00",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "AvailableFunds",
-        "value": "995414.14",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "BuyingPower",
-        "value": "3981656.56",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "EquityWithLoanValue",
-        "value": "999751.00",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "ExcessLiquidity",
-        "value": "995808.40",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "FullAvailableFunds",
-        "value": "995414.14",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "FullExcessLiquidity",
-        "value": "995808.40",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "FullInitMarginReq",
-        "value": "4336.86",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "FullMaintMarginReq",
-        "value": "3942.60",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "GrossPositionValue",
-        "value": "13142.00",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "InitMarginReq",
-        "value": "4336.86",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "LookAheadAvailableFunds",
-        "value": "995414.14",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "LookAheadExcessLiquidity",
-        "value": "995808.40",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "LookAheadInitMarginReq",
-        "value": "4336.86",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "LookAheadMaintMarginReq",
-        "value": "3942.60",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "MaintMarginReq",
-        "value": "3942.60",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "NetLiquidation",
-        "value": "999751.00",
-        "currency": "USD",
-        "modelCode": ""
-    },
-    {
-        "account": "DU3799451",
-        "tag": "SMA",
-        "value": "993515.00",
-        "currency": "USD",
-        "modelCode": ""
-    },
+    ...
     {
         "account": "DU3799451",
         "tag": "TotalCashValue",
@@ -215,4 +76,29 @@ Response example:
         "realizedPnL": 0.0
     }
 }
+```
+
+### GET /positions/\<account name\>
+List of positions for the given account, or of all accounts if account is left blank.
+Request example: `http://localhost:5000/positions/DU3799451`
+Response example: 
+```
+[
+    {
+        "account": "DU3799451",
+        "contract": {
+            "Stock": {
+                "secType": "STK",
+                "conId": 265598,
+                "symbol": "AAPL",
+                "exchange": "NASDAQ",
+                "currency": "USD",
+                "localSymbol": "AAPL",
+                "tradingClass": "NMS"
+            }
+        },
+        "position": 100.0,
+        "avgCost": 133.91
+    }
+]
 ```
