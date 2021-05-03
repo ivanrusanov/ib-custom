@@ -96,6 +96,14 @@ async def orders():
     return resp
 
 
+@qrt.route('/trades')
+async def trades():
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _trades = ibi.trades()
+        resp = json.dumps(util.tree(_trades))
+    return resp
+
+
 if __name__ == '__main__':
     logger.info('Application started')
     qrt.run(host='0.0.0.0', debug=True)
