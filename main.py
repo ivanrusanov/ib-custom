@@ -41,7 +41,6 @@ async def account():
 async def summary():
     with await IB().connectAsync(host, port, client_id) as ibi:
         _summary = ibi.accountSummary()
-        await ibi.accountSummaryEvent
         resp = json.dumps(util.tree(_summary))
     return resp
 
@@ -50,7 +49,6 @@ async def summary():
 async def summary_for_account(account):
     with await IB().connectAsync(host, port, client_id) as ibi:
         _summary = ibi.accountSummary(account)
-        await ibi.accountSummaryEvent
         resp = json.dumps(util.tree(_summary))
     return resp
 
