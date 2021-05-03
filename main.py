@@ -88,6 +88,14 @@ async def positions_for_account(account):
     return resp
 
 
+@qrt.route('/orders')
+async def orders():
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _orders = ibi.orders()
+        resp = json.dumps(util.tree(_orders))
+    return resp
+
+
 if __name__ == '__main__':
     logger.info('Application started')
     qrt.run(host='0.0.0.0', debug=True)

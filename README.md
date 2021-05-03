@@ -102,3 +102,7 @@ Response example:
     }
 ]
 ```
+
+### GET /orders
+List of all orders from this session.
+Request example: `http://localhost:5000/orders`
