@@ -118,3 +118,15 @@ Request example: `http://localhost:5000/orders/completed`
 ### GET /trades
 List of all order trades from this session.
 Request example: `http://localhost:5000/trades`
+
+### GET /trades/open
+List of all open order trades.
+Request example: `http://localhost:5000/trades/open`
+
+### GET /fills
+List of all fills from this session.
+Request example: `http://localhost:5000/fills`
+
+### GET /executions
+List of all executions from this session.
+Request example: `http://localhost:5000/executions`
