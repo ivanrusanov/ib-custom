@@ -1,10 +1,10 @@
 import configparser
 import json
 import logging.config
-import nest_asyncio
 
-from quart import Quart
+import nest_asyncio
 from ib_insync import IB, util
+from quart import Quart
 
 # Frameworks
 nest_asyncio.apply()
@@ -101,6 +101,22 @@ async def trades():
     with await IB().connectAsync(host, port, client_id) as ibi:
         _trades = ibi.trades()
         resp = json.dumps(util.tree(_trades))
+    return resp
+
+
+@qrt.route('/orders/open')
+async def open_orders():
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _orders = ibi.openOrders()
+        resp = json.dumps(util.tree(_orders))
+    return resp
+
+
+@qrt.route('/orders/completed')
+async def completed_orders():
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _orders = ibi.reqCompletedOrders(False)
+        resp = json.dumps(util.tree(_orders))
     return resp
 
 
