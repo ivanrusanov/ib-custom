@@ -3,8 +3,8 @@ import json
 import logging.config
 
 import nest_asyncio
-from ib_insync import IB, util
-from quart import Quart
+from ib_insync import IB, util, Stock, Forex, Contract
+from quart import Quart, request
 
 # Frameworks
 nest_asyncio.apply()
@@ -141,6 +141,16 @@ async def executions():
     with await IB().connectAsync(host, port, client_id) as ibi:
         _executions = ibi.executions()
         resp = json.dumps(util.tree(_executions))
+    return resp
+
+
+@qrt.route('/reqMktData')
+async def req_mkt_data():
+    data = request.args.to_dict()
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        ticker = ibi.reqMktData(Contract(**data))
+        ib.sleep(2)
+        resp = json.dumps(util.tree(ticker))
     return resp
 
 

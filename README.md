@@ -25,16 +25,16 @@ Returns OK if IB Custom service is running (health check)
 ### GET /accounts
 Returns the list of managed account names.
 
-Request example: `http://localhost:5000/accounts`
+**Request example:** `http://localhost:5000/accounts`
 
-Response example: `["DU3799451", "DU3243554"]`
+**Response example:** `["DU3799451", "DU3243554"]`
 
 ### GET /summary/\<account name\>
 List of account values for the given account, or of all accounts if account is left blank.
 
-Request example: `http://localhost:5000/summary/DU3799451`
+**Request example:** `http://localhost:5000/summary/DU3799451`
 
-Response example:
+**Response example:**
 ```
 [
     {
@@ -65,8 +65,9 @@ Response example:
 ### GET /pnl/\<account name\>
 List of subscribed PnL objects (profit and loss), optionally filtered by account.
 
-Request example: `http://localhost:5000/pnl/DU3799451`
-Response example: 
+**Request example:** `http://localhost:5000/pnl/DU3799451`
+
+**Response example:** 
 ```
 {
     "PnL": {
@@ -80,8 +81,10 @@ Response example:
 
 ### GET /positions/\<account name\>
 List of positions for the given account, or of all accounts if account is left blank.
-Request example: `http://localhost:5000/positions/DU3799451`
-Response example: 
+
+**Request example:** `http://localhost:5000/positions/DU3799451`
+
+**Response example:** 
 ```
 [
     {
@@ -105,28 +108,68 @@ Response example:
 
 ### GET /orders
 List of all orders from this session.
-Request example: `http://localhost:5000/orders`
+
+**Request example:** `http://localhost:5000/orders`
 
 ### GET /orders/open
 List of all open orders.
-Request example: `http://localhost:5000/orders/open`
+
+**Request example:** `http://localhost:5000/orders/open`
 
 ### GET /orders/completed
 Request and return a list of completed trades.
-Request example: `http://localhost:5000/orders/completed`
+
+**Request example:** `http://localhost:5000/orders/completed`
 
 ### GET /trades
 List of all order trades from this session.
-Request example: `http://localhost:5000/trades`
+
+**Request example:** `http://localhost:5000/trades`
 
 ### GET /trades/open
 List of all open order trades.
-Request example: `http://localhost:5000/trades/open`
+
+**Request example:** `http://localhost:5000/trades/open`
 
 ### GET /fills
 List of all fills from this session.
-Request example: `http://localhost:5000/fills`
+
+**Request example:** `http://localhost:5000/fills`
 
 ### GET /executions
 List of all executions from this session.
-Request example: `http://localhost:5000/executions`
+
+**Request example:** `http://localhost:5000/executions`
+
+### GET /reqMktData
+Returns live market data (subscription required).
+
+#### Parameters
+**symbol** – The contract (or its underlying) symbol.
+
+**secType** - The security type:
+
+    ’STK’ = Stock (or ETF)
+    ’OPT’ = Option
+    ’FUT’ = Future
+    ’IND’ = Index
+    ’FOP’ = Futures option
+    ’CASH’ = Forex pair
+    ’CFD’ = CFD
+    ’BAG’ = Combo
+    ’WAR’ = Warrant
+    ’BOND’= Bond
+    ’CMDTY’= Commodity
+    ’NEWS’ = News
+    ’FUND’= Mutual fund
+
+**exchange** – The destination exchange.
+
+**currency** – The underlying’s currency.
+
+**primaryExchange** – The contract’s primary exchange. For smart routed contracts, used to define contract in case of ambiguity. Should be defined as native exchange of contract, e.g. ISLAND for MSFT. For exchanges which contain a period in name, will only be part of exchange name prior to period, i.e. ENEXT for ENEXT.BE.
+
+*For  more options see: https://ib-insync.readthedocs.io/api.html#module-ib_insync.contract* 
+
+**Request example:** `http://localhost:5000/reqMktData?secType=STK&symbol=AMD&exchange=SMART&currency=USD`
+
