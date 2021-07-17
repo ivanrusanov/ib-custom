@@ -173,3 +173,49 @@ Returns live market data (subscription required).
 
 **Request example:** `http://localhost:5000/reqMktData?secType=STK&symbol=AMD&exchange=SMART&currency=USD`
 
+### GET /reqHistoricalTicks
+Request historical ticks. The time resolution of the ticks is one second.
+
+#### Parameters
+Contract description required. See reqMktData.
+
+**startDateTime** – Can be given as a datetime.date or datetime.datetime, or it can be given as a string in ‘yyyyMMdd HH:mm:ss’ format. If no timezone is given then the TWS login timezone is used.
+
+**endDateTime** – One of startDateTime or endDateTime can be given, the other must be blank.
+
+**numberOfTicks** – Number of ticks to request (1000 max). The actual result can contain a bit more to accommodate all ticks in the latest second.
+
+**whatToShow** – One of ‘Bid_Ask’, ‘Midpoint’ or ‘Trades’.
+
+**useRTH** – If True then only show data from within Regular Trading Hours, if False then show all data.
+
+**ignoreSize** – Ignore bid/ask ticks that only update the size.
+
+**Request example:** `http://localhost:5000/reqHistoricalTicks?secType=STK&symbol=AMD&exchange=SMART&currency=USD&startDateTime=20210710 10:00:00&numberOfTicks=10&whatToShow=Bid_Ask&useRTH=True&ignoreSize=False`
+
+### GET /reqFundamentalData
+Get fundamental data of a contract in XML format.
+
+#### Parameters
+Contract description required. See reqMktData.
+
+reportType –
+
+    ‘ReportsFinSummary’: Financial summary
+    
+    ’ReportsOwnership’: Company’s ownership
+    
+    ’ReportSnapshot’: Company’s financial overview
+    
+    ’ReportsFinStatements’: Financial Statements
+    
+    ’RESC’: Analyst Estimates
+    
+    ’CalendarReport’: Company’s calendar
+
+**Request example:** `http://localhost:5000/reqFundamentalData?secType=STK&symbol=AMD&exchange=SMART&currency=USD&reportType=ReportsFinSummary`
+
+### GET /tickers
+Get a list of all tickers.
+
+**Request example:** `http://localhost:5000/tickers`

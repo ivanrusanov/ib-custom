@@ -1,6 +1,7 @@
 import configparser
 import json
 import logging.config
+from typing import Optional, Union
 
 import nest_asyncio
 from ib_insync import IB, util, Stock, Forex, Contract
@@ -152,6 +153,58 @@ async def req_mkt_data():
         ib.sleep(2)
         resp = json.dumps(util.tree(ticker))
     return resp
+
+
+@qrt.route('/reqHistoricalTicks')
+async def req_historical_ticks():
+    data = request.args.to_dict()
+    start_date_time = get_and_exclude(data, 'startDateTime')
+    end_date_time = get_and_exclude(data, 'endDateTime')
+    number_of_ticks = to_int(get_and_exclude(data, 'numberOfTicks'))
+    what_to_show = get_and_exclude(data, 'whatToShow')
+    use_rth = bool(get_and_exclude(data, 'useRTH'))
+    ignore_size = bool(get_and_exclude(data, 'ignoreSize'))
+
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _tickers = ibi.reqHistoricalTicks(Contract(**data), start_date_time, end_date_time, number_of_ticks,
+                                          what_to_show, use_rth, ignore_size)
+        ib.sleep(2)
+        resp = json.dumps(util.tree(_tickers))
+    return resp
+
+
+@qrt.route('/reqFundamentalData')
+async def req_fundamental_data():
+    data = request.args.to_dict()
+    report_type = get_and_exclude(data, 'reportType')
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        fundamentals = ibi.reqFundamentalData(Contract(**data), report_type)
+        ib.sleep(2)
+        return fundamentals
+
+
+@qrt.route('/tickers')
+async def tickers():
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        _tickers = ibi.tickers()
+        resp = json.dumps(util.tree(_tickers))
+    return resp
+
+
+def get_and_exclude(dictionary: dict, key: str) -> Optional[str]:
+    if key in dictionary:
+        res = dictionary[key]
+        del dictionary[key]
+        return res
+    else:
+        return None
+
+
+def to_int(value: Union[None, str]) -> Optional[int]:
+    if value is None:
+        return None
+    else:
+        return int(value)
 
 
 if __name__ == '__main__':
