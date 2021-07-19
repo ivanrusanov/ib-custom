@@ -4,7 +4,7 @@ import logging.config
 from typing import Optional, Union
 
 import nest_asyncio
-from ib_insync import IB, util, Stock, Forex, Contract
+from ib_insync import IB, util, Contract
 from quart import Quart, request
 
 # Frameworks
@@ -191,6 +191,50 @@ async def tickers():
     return resp
 
 
+@qrt.route('/calculateImpliedVolatility')
+async def calculate_implied_volatility():
+    data = request.args.to_dict()
+    option_price = to_float(get_and_exclude(data, 'optionPrice'))
+    under_price = to_float(get_and_exclude(data, 'underPrice'))
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        volatility = ibi.calculateImpliedVolatility(Contract(**data), option_price, under_price)
+        return volatility
+
+
+@qrt.route('/calculateOptionPrice')
+async def calculate_option_price():
+    data = request.args.to_dict()
+    volatility = to_float(get_and_exclude(data, 'volatility'))
+    under_price = to_float(get_and_exclude(data, 'underPrice'))
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        price = ibi.calculateOptionPrice(Contract(**data), volatility, under_price)
+        return price
+
+
+@qrt.route('/reqSecDefOptParams')
+async def req_sec_def_opt_params():
+    data = request.args.to_dict()
+    underlying_symbol = get_and_exclude(data, 'underlyingSymbol')
+    fut_fop_exchange = get_and_exclude(data, 'futFopExchange')
+    underlying_sec_type = get_and_exclude(data, 'underlyingSecType')
+    underlying_con_id = to_int(get_and_exclude(data, 'underlyingConId'))
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        res = ibi.reqSecDefOptParams(underlying_symbol, fut_fop_exchange, underlying_sec_type, underlying_con_id)
+        return res
+
+
+@qrt.route('/exerciseOptions')
+async def exercise_options():
+    data = request.args.to_dict()
+    exercise_action = to_int(get_and_exclude(data, 'exerciseAction'))
+    exercise_quantity = to_int(get_and_exclude(data, 'exerciseQuantity'))
+    _account = get_and_exclude(data, 'account')
+    _override = to_int(get_and_exclude(data, 'override'))
+    with await IB().connectAsync(host, port, client_id) as ibi:
+        ibi.exerciseOptions(Contract(**data), exercise_action, exercise_quantity, _account, _override)
+        return 'OK'
+
+
 def get_and_exclude(dictionary: dict, key: str) -> Optional[str]:
     if key in dictionary:
         res = dictionary[key]
@@ -205,6 +249,13 @@ def to_int(value: Union[None, str]) -> Optional[int]:
         return None
     else:
         return int(value)
+
+
+def to_float(value: Union[None, str]) -> Optional[float]:
+    if value is None:
+        return None
+    else:
+        return float(value)
 
 
 if __name__ == '__main__':

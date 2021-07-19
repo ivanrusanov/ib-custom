@@ -219,3 +219,55 @@ reportType –
 Get a list of all tickers.
 
 **Request example:** `http://localhost:5000/tickers`
+
+### GET /calculateImpliedVolatility
+Calculate the volatility given the option price.
+
+#### Parameters
+Contract description required. See reqMktData.
+
+**optionPrice** – Option price to use in calculation.
+
+**underPrice** – Price of the underlier to use in calculation
+
+### GET /calculateOptionPrice
+Calculate the option price given the volatility.
+
+#### Parameters
+Contract description required. See reqMktData.
+
+**volatility** – Option volatility to use in calculation.
+
+**underPrice** – Price of the underlier to use in calculation
+
+### GET /reqSecDefOptParams
+Get the option chain.
+
+#### Parameters
+**underlyingSymbol** – Symbol of underlier contract.
+
+**futFopExchange** – Exchange (only for FuturesOption, otherwise leave blank).
+
+**underlyingSecType** – The type of the underlying security, like ‘STK’ or ‘FUT’.
+
+**underlyingConId** – conId of the underlying contract.
+
+### GET /exerciseOptions
+Exercise an options contract.
+
+#### Parameters
+Contract description required. See reqMktData.
+
+**exerciseAction** –
+    
+    1 = exercise the option
+    2 = let the option lapse
+
+**exerciseQuantity** – Number of contracts to be exercised.
+
+**account** – Destination account.
+
+**override** –
+
+    0 = no override
+    1 = override the system’s natural action
