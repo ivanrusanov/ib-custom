@@ -16,9 +16,7 @@ ib = IB()
 config = configparser.ConfigParser()
 config.read('settings.ini')
 
-host = json.loads(config['TWS']['host'])
-port = json.loads(config['TWS']['port'])
-client_id = json.loads(config['TWS']['client_id'])
+connections = json.loads(config['TWS']['connections'])
 
 # Logging
 logging.config.fileConfig('logging.conf')
@@ -34,7 +32,7 @@ def health():
 @qrt.route('/accounts/<instance>')
 async def account(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         acct = json.dumps(ibi.managedAccounts())
     return acct
 
@@ -42,7 +40,7 @@ async def account(instance):
 @qrt.route('/summary/<instance>')
 async def summary(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _summary = ibi.accountSummary()
         resp = json.dumps(util.tree(_summary))
     return resp
@@ -51,7 +49,7 @@ async def summary(instance):
 @qrt.route('/summary/<instance>/<account>')
 async def summary_for_account(instance, account):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _summary = ibi.accountSummary(account)
         resp = json.dumps(util.tree(_summary))
     return resp
@@ -60,7 +58,7 @@ async def summary_for_account(instance, account):
 @qrt.route('/pnl/<instance>')
 async def pnl(instance):
     instance = int(instance)
-    with await IB().connectAsync(host, port, client_id) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         acct = ibi.managedAccounts()[0]
         pnl = ibi.reqPnL(acct)
         await ibi.pnlEvent
@@ -71,7 +69,7 @@ async def pnl(instance):
 @qrt.route('/pnl/<instance>/<account>')
 async def pnl_for_account(instance, account):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         pnl = ibi.reqPnL(account)
         await ibi.pnlEvent
         resp = json.dumps(util.tree(pnl))
@@ -81,7 +79,7 @@ async def pnl_for_account(instance, account):
 @qrt.route('/positions/<instance>')
 async def positions(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _positions = ibi.positions()
         resp = json.dumps(util.tree(_positions))
     return resp
@@ -90,7 +88,7 @@ async def positions(instance):
 @qrt.route('/positions/<instance>/<account>')
 async def positions_for_account(instance, account):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _positions = ibi.positions(account)
         resp = json.dumps(util.tree(_positions))
     return resp
@@ -99,7 +97,7 @@ async def positions_for_account(instance, account):
 @qrt.route('/orders/<instance>')
 async def orders(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _orders = ibi.orders()
         resp = json.dumps(util.tree(_orders))
     return resp
@@ -108,7 +106,7 @@ async def orders(instance):
 @qrt.route('/orders/open/<instance>')
 async def open_orders(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _orders = ibi.openOrders()
         resp = json.dumps(util.tree(_orders))
     return resp
@@ -117,7 +115,7 @@ async def open_orders(instance):
 @qrt.route('/orders/completed/<instance>')
 async def completed_orders(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _orders = ibi.reqCompletedOrders(False)
         resp = json.dumps(util.tree(_orders))
     return resp
@@ -126,7 +124,7 @@ async def completed_orders(instance):
 @qrt.route('/trades/<instance>')
 async def trades(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _trades = ibi.trades()
         resp = json.dumps(util.tree(_trades))
     return resp
@@ -135,7 +133,7 @@ async def trades(instance):
 @qrt.route('/trades/open/<instance>')
 async def open_trades(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _trades = ibi.openTrades()
         resp = json.dumps(util.tree(_trades))
     return resp
@@ -144,7 +142,7 @@ async def open_trades(instance):
 @qrt.route('/fills/<instance>')
 async def fills(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _fills = ibi.fills()
         resp = json.dumps(util.tree(_fills))
     return resp
@@ -153,7 +151,7 @@ async def fills(instance):
 @qrt.route('/executions/<instance>')
 async def executions(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _executions = ibi.executions()
         resp = json.dumps(util.tree(_executions))
     return resp
@@ -163,7 +161,7 @@ async def executions(instance):
 async def req_mkt_data(instance):
     instance = int(instance)
     data = request.args.to_dict()
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         ticker = ibi.reqMktData(Contract(**data))
         ib.sleep(2)
         resp = json.dumps(util.tree(ticker))
@@ -181,7 +179,7 @@ async def req_historical_ticks(instance):
     use_rth = bool(get_and_exclude(data, 'useRTH'))
     ignore_size = bool(get_and_exclude(data, 'ignoreSize'))
 
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _tickers = ibi.reqHistoricalTicks(Contract(**data), start_date_time, end_date_time, number_of_ticks,
                                           what_to_show, use_rth, ignore_size)
         ib.sleep(2)
@@ -194,7 +192,7 @@ async def req_fundamental_data(instance):
     instance = int(instance)
     data = request.args.to_dict()
     report_type = get_and_exclude(data, 'reportType')
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         fundamentals = ibi.reqFundamentalData(Contract(**data), report_type)
         ib.sleep(2)
         return fundamentals
@@ -203,7 +201,7 @@ async def req_fundamental_data(instance):
 @qrt.route('/tickers/<instance>')
 async def tickers(instance):
     instance = int(instance)
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         _tickers = ibi.tickers()
         resp = json.dumps(util.tree(_tickers))
     return resp
@@ -215,7 +213,7 @@ async def calculate_implied_volatility(instance):
     data = request.args.to_dict()
     option_price = to_float(get_and_exclude(data, 'optionPrice'))
     under_price = to_float(get_and_exclude(data, 'underPrice'))
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         volatility = ibi.calculateImpliedVolatility(Contract(**data), option_price, under_price)
         return volatility
 
@@ -226,7 +224,7 @@ async def calculate_option_price(instance):
     data = request.args.to_dict()
     volatility = to_float(get_and_exclude(data, 'volatility'))
     under_price = to_float(get_and_exclude(data, 'underPrice'))
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         price = ibi.calculateOptionPrice(Contract(**data), volatility, under_price)
         return price
 
@@ -239,7 +237,7 @@ async def req_sec_def_opt_params(instance):
     fut_fop_exchange = get_and_exclude(data, 'futFopExchange')
     underlying_sec_type = get_and_exclude(data, 'underlyingSecType')
     underlying_con_id = to_int(get_and_exclude(data, 'underlyingConId'))
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         res = ibi.reqSecDefOptParams(underlying_symbol, fut_fop_exchange, underlying_sec_type, underlying_con_id)
         return res
 
@@ -252,7 +250,7 @@ async def exercise_options(instance):
     exercise_quantity = to_int(get_and_exclude(data, 'exerciseQuantity'))
     _account = get_and_exclude(data, 'account')
     _override = to_int(get_and_exclude(data, 'override'))
-    with await IB().connectAsync(host[instance], port[instance], client_id[instance]) as ibi:
+    with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
         ibi.exerciseOptions(Contract(**data), exercise_action, exercise_quantity, _account, _override)
         return 'OK'
 
