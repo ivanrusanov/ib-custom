@@ -41,7 +41,7 @@ async def account(instance):
 async def summary(instance):
     instance = int(instance)
     with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
-        _summary = ibi.accountSummary()
+        _summary = ibi.accountValues()
         resp = json.dumps(util.tree(_summary))
     return resp
 
@@ -50,7 +50,7 @@ async def summary(instance):
 async def summary_for_account(instance, account):
     instance = int(instance)
     with await IB().connectAsync(connections[instance]['host'], connections[instance]['port'], connections[instance]['client_id']) as ibi:
-        _summary = ibi.accountSummary(account)
+        _summary = ibi.accountValues(account)
         resp = json.dumps(util.tree(_summary))
     return resp
 
